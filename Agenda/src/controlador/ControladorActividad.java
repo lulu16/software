@@ -75,11 +75,11 @@ public class ControladorActividad {
         return bandera;
     }
 
-    public void eliminarTarea(Actividad a) {
+    public void eliminarActividad(int codigo) {
         try {
             con = new Conexion();
             statement = con.getConexion().createStatement(rs.TYPE_SCROLL_SENSITIVE, rs.CONCUR_UPDATABLE);
-            statement.executeUpdate("DELETE FROM Actividad WHERE id_act =" + a.getId() + ";");
+            statement.executeUpdate("DELETE FROM Actividad WHERE id_act =" + codigo + ";");
             JOptionPane.showMessageDialog(null, "El tareaa ha sido Eliminado");
         } catch (SQLException ex) {
 //            System.out.println("Hubo un problema al intentar conectarse con la base de datos " + url);
@@ -129,6 +129,36 @@ public class ControladorActividad {
         try {
             statement = con.getConexion().createStatement(rs.TYPE_SCROLL_SENSITIVE, rs.CONCUR_UPDATABLE);
             rs = statement.executeQuery("SELECT * FROM Actividad WHERE id_act= " + codigo + ";");
+            while (rs.next()) {
+                int id = rs.getInt(1);
+
+                String nombres = rs.getString(2);
+                String descripcion = rs.getString(3);
+                String fecha = rs.getString(4);
+                String lugar = rs.getString(5);
+
+                a.setId(id);
+                a.setNombre(nombres);
+                a.setDescripcion(descripcion);
+                a.setFecha(fecha);
+                a.setLugar(lugar);
+
+            }
+            rs.close();
+            statement.close();
+        } catch (SQLException ex) {
+            System.out.println("Hubo un problema al intentar conectarse con la base de datos tabla alumno ");
+        }
+        return a;
+    }
+    
+    public Actividad buscarActividadNombre(String nombre) {
+        con = new Conexion();
+        Actividad a = new Actividad();
+
+        try {
+            statement = con.getConexion().createStatement(rs.TYPE_SCROLL_SENSITIVE, rs.CONCUR_UPDATABLE);
+            rs = statement.executeQuery("SELECT * FROM Actividad WHERE nombre= '" + nombre + "';");
             while (rs.next()) {
                 int id = rs.getInt(1);
 

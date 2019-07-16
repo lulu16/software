@@ -34,7 +34,7 @@ public class ControladorAgenda {
         
     }
     
-    public boolean crearTarea(Agenda usr) {
+    public boolean crearAgenda(Agenda usr) {
         boolean bandera = false;
         String sql = "INSERT INTO Agenda(Actividad_id_act, Tarea_id_tar, Usuario_id_usu"
                 + ") " + "VALUES (?,?,?);";
@@ -78,11 +78,11 @@ public class ControladorAgenda {
         return bandera;
     }
     
-    public void eliminarTarea(Agenda a) {
+    public void eliminarAgenda(int codigo) {
         try {
             con = new Conexion();
             statement = con.getConexion().createStatement(rs.TYPE_SCROLL_SENSITIVE, rs.CONCUR_UPDATABLE);
-            statement.executeUpdate("DELETE FROM Agenda WHERE id_age =" + a.getId() + ";");
+            statement.executeUpdate("DELETE FROM Agenda WHERE id_age =" + codigo + ";");
             JOptionPane.showMessageDialog(null, "El tareaa ha sido Eliminado");
         } catch (SQLException ex) {
 //            System.out.println("Hubo un problema al intentar conectarse con la base de datos " + url);

@@ -33,33 +33,39 @@ public class ControladorUsuario {
 
     }
 
-//    public boolean existeUsuario(String usr, String pass, String Tipo) {
-//        boolean bandera = false;
-//        String sql = "SELECT * FROM usuario, tipousuario WHERE usuario = '" + usr + "' and contrasenia = '" + pass + "' and id_TipoUsuario=TipoUsuario_id_TipoUsuario and descripcion='" + Tipo + "';";
-//        int cargoId;
-//        try {
-//            ps = con.getConexion().prepareStatement(sql);
-//            rs = ps.executeQuery();
-//            if (rs.next()) {
-//                cargoId = rs.getInt(8);
-//                if (cargoId == 1) {
-//                    bandera = true;
-//                }
-//                if (cargoId == 2) {
-//                    JOptionPane.showMessageDialog(null, "Es Usurio");
-//                    bandera = true;
-//                }
-//            } else {
-//                JOptionPane.showMessageDialog(null, "Usuario o contrasenia Incorrecta");
-//                bandera = false;
-//            }
-//            con.desconectar();
-//        } catch (SQLException ex) {
-//            JOptionPane.showMessageDialog(null, "No existe");
-//        }
-//        return bandera;
-//
-//    }
+    public Usuario existeUsuario(String usr, String pass) {
+         con = new Conexion();
+        Usuario a = new Usuario();
+
+        try {
+            statement = con.getConexion().createStatement(rs.TYPE_SCROLL_SENSITIVE, rs.CONCUR_UPDATABLE);
+            rs = statement.executeQuery("SELECT * FROM usuario WHERE correo = '" + usr + "' and contrasenia = '" + pass + "';");
+        while (rs.next()) {
+                int id = rs.getInt(1);
+
+                String nombres = rs.getString(2);
+                String apellidos = rs.getString(3);
+                String correo = rs.getString(4);
+                String contrasenia = rs.getString(5);
+
+                a.setId(id);
+                a.setNombre(nombres);
+                a.setApellido(apellidos);
+                a.setCorreo(correo);
+                a.setContrasenia(contrasenia);
+
+            }
+            rs.close();
+            statement.close();
+        } catch (SQLException ex) {
+            System.out.println("Hubo un problema al intentar conectarse con la base de datos tabla alumno ");
+        }
+        return a;
+        
+
+    }
+
+    
     public boolean crearUsuario(Usuario usr) {
         boolean bandera = false;
         String sql = "INSERT INTO usuario(nombre, apellido, correo, contrasenia"
@@ -179,6 +185,38 @@ public class ControladorUsuario {
         }
         return a;
     }
+    
+    public Usuario buscarUsuarioNombre(String nombre, String apellido) {
+        con = new Conexion();
+        Usuario a = new Usuario();
+
+        try {
+            statement = con.getConexion().createStatement(rs.TYPE_SCROLL_SENSITIVE, rs.CONCUR_UPDATABLE);
+            rs = statement.executeQuery("SELECT * FROM Usuario WHERE nombre = '" + nombre + "' and apellido = '" + apellido + "';");
+            while (rs.next()) {
+                int id = rs.getInt(1);
+
+                String nombres = rs.getString(2);
+                String apellidos = rs.getString(3);
+                String correo = rs.getString(4);
+                String contrasenia = rs.getString(5);
+
+                a.setId(id);
+                a.setNombre(nombres);
+                a.setApellido(apellidos);
+                a.setCorreo(correo);
+                a.setContrasenia(contrasenia);
+
+            }
+            rs.close();
+            statement.close();
+        } catch (SQLException ex) {
+            System.out.println("Hubo un problema al intentar conectarse con la base de datos tabla alumno ");
+        }
+        return a;
+    }
+    
+    
 
 //         public Usuario buscarUsuarioCedula(String cedula) {
 //        Usuario usr=new Usuario();
